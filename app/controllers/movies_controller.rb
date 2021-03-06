@@ -7,8 +7,25 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    @all_ratings = Movie.all_ratings
+    @sort = params[:sort]
+    
+    if params[:ratings]
+      @ratings_to_show = params[:ratings]
+    else
+      @ratings_to_show = @all_ratings
   end
+    if @ratings_to_show && @sort
+      @movies = Movie.where(ratings: @ratings_to_show).order(@sort)
+    elsif @ratings_to_show 
+      @movies = Movie.where(ratings: @ratings_to_show)
+    elsif @sort
+      @movies = Movie.all.order(@sort)
+    else
+      @movies = Movie.all
+    end
+  end
+      
 
   def new
     # default: render 'new' template
