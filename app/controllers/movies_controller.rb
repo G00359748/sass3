@@ -8,8 +8,6 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = Movie.all_ratings
-    @sort = params[:sort]
-    @ratings_to_show = []
     
     if params[:ratings]
       @ratings_to_show = params[:ratings]
@@ -25,6 +23,15 @@ class MoviesController < ApplicationController
       @all_ratings.each do |rating|
         @ratings_to_show[rating] = 1
       end
+    end
+    
+    if params[:sort]
+      @sort = params[:sort]
+      session[:sort] = @sort
+    elsif session[:sort]
+      @sort =session[:sort]
+    else
+      @sort = nil
     end
     
     if @ratings_to_show && @sort
