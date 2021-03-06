@@ -16,6 +16,7 @@ class MoviesController < ApplicationController
     else
       @ratings_to_show = @all_ratings
   end
+    
     if @ratings_to_show && @sort
       @movies = Movie.where(ratings: @ratings_to_show).order(@sort)
     elsif @ratings_to_show 
