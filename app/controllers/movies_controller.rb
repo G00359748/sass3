@@ -13,14 +13,24 @@ class MoviesController < ApplicationController
     
     if params[:ratings]
       @ratings_to_show = params[:ratings]
+      session[:ratings] = @ratings_to_show
+      elsif session[:ratings]
+      @ratings_to_show = session[:ratings]  
     else
-      @ratings_to_show = @all_ratings
+      @ratings_to_show = nil
   end
     
+    if !@ratings_to_show
+      @ratings_to_show = Hash.new
+      @all_ratings.each do |rating|
+        @ratings_to_show[rating] = 1
+      end
+    end
+    
     if @ratings_to_show && @sort
-      @movies = Movie.where(ratings: @ratings_to_show).order(@sort)
+      @movies = Movie.where(ratings: @ratings_to_show.keys).order(@sort)
     elsif @ratings_to_show 
-      @movies = Movie.where(ratings: @ratings_to_show)
+      @movies = Movie.where(ratings: @ratings_to_show.keys)
     elsif @sort
       @movies = Movie.all.order(@sort)
     else
