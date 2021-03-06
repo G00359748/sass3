@@ -11,14 +11,15 @@ class MoviesController < ApplicationController
     @sort = params[:sort]
     @ratings_to_show = []
     
+    
     if params[:ratings]
       @ratings_to_show = params[:ratings]
       session[:ratings] = @ratings_to_show
       elsif session[:ratings]
-      @ratings_to_show = session[:ratings]  
+        @ratings_to_show = session[:ratings]
     else
-      @ratings_to_show = nil
-  end
+        @ratings_to_show = nil
+    end
     
     if !@ratings_to_show
       @ratings_to_show = Hash.new
@@ -28,16 +29,15 @@ class MoviesController < ApplicationController
     end
     
     if @ratings_to_show && @sort
-      @movies = Movie.where(ratings: @ratings_to_show.keys).order(@sort)
-    elsif @ratings_to_show 
-      @movies = Movie.where(ratings: @ratings_to_show.keys)
+      @movies = Movie.where(:rating => @ratings_to_show.keys).order(@sort)
+    elsif @ratings_to_show
+      @movies = Movie.where(:rating => @ratings_to_show.keys)
     elsif @sort
       @movies = Movie.all.order(@sort)
     else
       @movies = Movie.all
     end
-  end
-      
+  end  
 
   def new
     # default: render 'new' template
